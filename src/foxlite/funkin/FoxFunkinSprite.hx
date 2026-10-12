@@ -7,6 +7,8 @@ import foxlite.material.FoxTriangleFace;
 import foxlite.mesh.buffer.FoxVertexBufferType;
 #if (foxlite_polymod || polymod)
 import funkin.graphics.FunkinSprite;
+#elseif nmv
+import funkin.objects.FunkinSprite;
 #else
 typedef FunkinSprite = Dynamic; // Keep haxe happy
 #end
