@@ -323,7 +323,7 @@ class FoxGLTFLoader {
 						(imageBytes:ByteArray).clear();
 						if(image == null) return;
 
-						trace("[FoxLite > FoxGLTFLoader]: Add buffer texture to cache: " + texture.assetsKey);
+						FoxLog.log('FoxGLTFLoader', 'Add buffer texture to cache: " + texture.assetsKey');
 
 						// Upload image directly to the GPU
 						// This method is completely detached from openfl's BitmapData operations
@@ -340,7 +340,7 @@ class FoxGLTFLoader {
 					}
 
 					function onImageError(e:Dynamic) {
-						trace('[Foxlite > FoxGLTFLoader]: Could not create buffer texture: ${image.name} ($e)');
+						FoxLog.error('FoxGLTFLoader', 'Could not create buffer texture: ${image.name} ($e)');
 						FoxCache.textures().remove(image.name);
 					}
 					
@@ -538,7 +538,7 @@ class FoxGLTFLoader {
 						#end
 
 						if(accessor.sparse != null) {
-							trace('Sparse not implemented yet.');
+							FoxLog.warning('FoxGLTFLoader', 'Sparse not implemented yet.');
 						}
 						
 						var gpuBuffer:FoxVertexBuffer = attrib == "INDICES" ? new FoxIndexBuffer(accessor.count, dataPerVertex) : new FoxVertexBuffer(accessor.count, dataPerVertex);

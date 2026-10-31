@@ -168,7 +168,7 @@ class FoxAnimationPlayer extends FoxAnimationLinker {
 				if(arg == null) continue;
 				var func = (cast track:FoxCallbackTrack).callbacks.get(arg[0]);
 				if(func != null) Reflect.callMethod(null, func, arg[1]);
-				else trace('Could not call "${arg[0]}"! For track "$trackName"');
+				else FoxLog.error("FoxAnimationPlayer", 'Could not call "${arg[0]}"! For track "$trackName"');
 				continue;
 			}
 
