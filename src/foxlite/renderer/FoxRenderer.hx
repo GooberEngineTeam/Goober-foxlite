@@ -426,7 +426,7 @@ class FoxRenderer {
 	**/
 	public static function initLibs() {
 		if(FoxRenderer.initialized) return;
-		FoxLog.log('FoxRenderer', '---------------     Initializing Libs     ---------------');
+		FoxLog.notice('FoxRenderer', '---------------     Initializing Libs     ---------------');
 		FoxMathUtil.staticInit();
 		FoxCache.staticInit();
 		FoxRenderer.staticInit();
@@ -438,7 +438,7 @@ class FoxRenderer {
 		trace(BoundingBox.__tempBounds2);
 		#end
 		onInit.dispatch();
-		FoxLog.log('FoxRenderer', '--------------- Finished Initializing Libs ---------------');
+		FoxLog.notice('FoxRenderer', '--------------- Finished Initializing Libs ---------------');
 	}
 
 	/*
