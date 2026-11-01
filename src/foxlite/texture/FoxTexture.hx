@@ -7,7 +7,12 @@ import haxe.crypto.Base64;
 import haxe.io.Path;
 import haxe.io.BytesInput;
 
+#if nmv
+import funkin.FunkinAssets as Assets;
+#else
 import lime.utils.Assets;
+#end
+
 import lime.graphics.opengl.GL;
 import lime.graphics.Image;
 import lime.system.ThreadPool;
@@ -298,12 +303,21 @@ class FoxTexture {
 		else {
 			// If we're on the main thread, load it async, else lime's own thread pool system clashes with itself (bruh)
 			if(ThreadPool.isMainThread() && !FoxRenderer.forceSyncLoading) {
+				#if nmv
+				var future = Image.loadFromFile(name);
+				#else
 				var future = Assets.loadImage(name, false);
+				#end
 				future.onComplete(onImageLoaded);
 				future.onError(onImageError);
 			}
-			else
+			else {
+				#if nmv
+				onImageLoaded(Image.fromFile(name));
+				#else
 				onImageLoaded(Assets.getImage(name));
+				#end
+			}
 		}
 
 		return foxTex;
@@ -391,12 +405,21 @@ class FoxTexture {
 		else {
 			// If we're on the main thread, load it async, else lime's own thread pool system clashes with itself (bruh)
 			if(ThreadPool.isMainThread() && !FoxRenderer.forceSyncLoading) {
+				#if nmv
+				var future = Bytes.loadFromFile(name);
+				#else
 				var future = Assets.loadBytes(name);
+				#end
 				future.onComplete(onBytesLoaded);
 				future.onError(onBytesError);
 			}
-			else
+			else {
+				#if nmv
+				onBytesLoaded(Bytes.fromFile(name));
+				#else
 				onBytesLoaded(Assets.getBytes(name));
+				#end
+			}
 		}
 
 		return foxTex;

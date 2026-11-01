@@ -49,7 +49,12 @@ import lime.math.Vector2;
 import lime.graphics.Image;
 import lime.system.Endian;
 import lime.system.ThreadPool;
+
+#if nmv
+import funkin.FunkinAssets as Assets;
+#else
 import lime.utils.Assets;
+#end
 
 import openfl.geom.Vector3D;
 import openfl.geom.Matrix3D;

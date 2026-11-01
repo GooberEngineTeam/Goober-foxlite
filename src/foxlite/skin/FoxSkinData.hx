@@ -13,7 +13,13 @@ import foxlite.polyfill.TypedArray;
 import foxlite.polyfill.VectorFactory;
 import foxlite.skin.FoxBone;
 import lime.utils.Float32Array;
+
+#if nmv
+import funkin.FunkinAssets as Assets;
+#else
 import lime.utils.Assets;
+#end
+
 import openfl.geom.Matrix3D;
 import openfl.geom.Vector3D;
 import foxlite.animation.FoxAnimation;
