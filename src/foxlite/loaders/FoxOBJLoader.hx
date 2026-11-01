@@ -41,7 +41,7 @@ class FoxOBJLoader {
 
 		var obj = FoxLoaderUtil.loadText(name);
 		if(obj == null) {
-			FoxLog.warning('FoxOBJLoader', 'Could not load OBJ: ${name} (Not found.)');
+			FoxLog.error('FoxOBJLoader', 'Could not load OBJ: ${name} (Not found.)');
 			return null;
 		}
 
