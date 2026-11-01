@@ -259,7 +259,7 @@ class FoxShader {
 				cache = FoxLoaderUtil.loadText(incPath);
 				// Silly but okay
 				if(cache == null) {
-					FoxLog.warning('FoxShader', 'FILE NOT FOUND: $incPath');
+					FoxLog.error('FoxShader', 'FILE NOT FOUND: $incPath');
 					cache = '// MISSING SOURCE: "$file" ($incPath)';
 				}
 				else { 
@@ -291,13 +291,13 @@ class FoxShader {
 		
 		if(Assets.exists(vert)) vert = Assets.getText(vert);
 		else {
-			FoxLog.warning('FoxShader', 'Vertex source not found for $vert');
+			FoxLog.error('FoxShader', 'Vertex source not found for $vert');
 			vert = "";
 		}
 
 		if(Assets.exists(frag)) frag = Assets.getText(frag);
 		else {
-			FoxLog.warning('FoxShader', 'Fragment source not found for $frag');
+			FoxLog.error('FoxShader', 'Fragment source not found for $frag');
 			frag = "";
 		}
 
