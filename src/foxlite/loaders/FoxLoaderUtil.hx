@@ -1,7 +1,12 @@
 package foxlite.loaders;
 
 import haxe.Json;
+
+#if nmv
+import funkin.FunkinAssets as Assets;
+#else
 import lime.utils.Assets;
+#end
 
 class FoxLoaderUtil {
 
@@ -53,13 +58,21 @@ class FoxLoaderUtil {
 	public static dynamic function loadJSON(name:String):Dynamic {
 		var path = filePath(name);
 		if(!Assets.exists(path)) return null;
+		#if nmv
+		return Json.parse(Assets.getContent(path));
+		#else
 		return Json.parse(Assets.getText(path));
+		#end
 	}
 
 	public static dynamic function loadText(name:String):String {
 		var path = filePath(name);
 		if(!Assets.exists(path)) return null;
+		#if nmv
+		return Assets.getContent(path);
+		#else
 		return Assets.getText(path);
+		#end
 	}
 	
 	/**

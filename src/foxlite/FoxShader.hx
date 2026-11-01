@@ -19,7 +19,13 @@ import openfl.geom.Vector3D;
 
 import lime.math.Vector2;
 import lime.utils.Float32Array;
+
+#if nmv
+import funkin.FunkinAssets as Assets;
+#else
 import lime.utils.Assets;
+#end
+
 import lime.graphics.opengl.GL;
 #if foxlite_polymod
 import lime.utils.DataPointer;
@@ -289,13 +295,21 @@ class FoxShader {
 		var vert:String = FoxLoaderUtil.shaderVert(name);
 		var frag:String = FoxLoaderUtil.shaderFrag(name);
 		
+		#if nmv
+		if(Assets.exists(vert)) vert = Assets.getContent(vert);
+		#else
 		if(Assets.exists(vert)) vert = Assets.getText(vert);
+		#end
 		else {
 			FoxLog.error('FoxShader', 'Vertex source not found for $vert');
 			vert = "";
 		}
 
+		#if nmv
+		if(Assets.exists(frag)) frag = Assets.getContent(frag);
+		#else
 		if(Assets.exists(frag)) frag = Assets.getText(frag);
+		#end
 		else {
 			FoxLog.error('FoxShader', 'Fragment source not found for $frag');
 			frag = "";
