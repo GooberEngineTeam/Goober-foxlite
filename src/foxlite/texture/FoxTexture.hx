@@ -230,7 +230,7 @@ class FoxTexture {
 		
 		var isDataUrl = StringTools.startsWith(name, "data:");
 		if(!Assets.exists(name) && !isDataUrl) {
-			FoxLog.warning('FoxTexture', 'Could not load image: ${name} (Not found.)');
+			FoxLog.error('FoxTexture', 'Could not load image: ${name} (Not found.)');
 			return null;
 		}
 
@@ -247,12 +247,12 @@ class FoxTexture {
 
 		function onImageLoaded(image:Image) {
 			if(image == null) {
-				FoxLog.warning('FoxTexture', 'Could not create image: ${name} (Image error.)');
+				FoxLog.error('FoxTexture', 'Could not create image: ${name} (Image error.)');
 				FoxCache.textures().remove(name);
 				return;
 			}
 			else if(image?.buffer == null) {
-				FoxLog.warning('FoxTexture', 'Could not create texture: ${name} (Asset was found, but Buffer is non-existant.)');
+				FoxLog.error('FoxTexture', 'Could not create texture: ${name} (Asset was found, but Buffer is non-existant.)');
 				FoxCache.textures().remove(name);
 				return;
 			}
@@ -281,7 +281,7 @@ class FoxTexture {
 		}
 
 		function onImageError(e:Dynamic) {
-			FoxLog.warning('FoxTexture', 'Could not create image: ${name} ($e)');
+			FoxLog.error('FoxTexture', 'Could not create image: ${name} ($e)');
 			FoxCache.textures().remove(name);
 		}
 
@@ -327,7 +327,7 @@ class FoxTexture {
 	**/
 	public static function fromImageCompressed(name:String, ?params:FoxTextureParams):FoxTexture {
 		if(!FoxRenderer.compressedTexturesSupported) {
-			FoxLog.warning('FoxTexture', 'Error loading compressed texture: $name (Compressed textures are not supported on this device!)');
+			FoxLog.error('FoxTexture', 'Error loading compressed texture: $name (Compressed textures are not supported on this device!)');
 			return null;
 		}
 
@@ -335,7 +335,7 @@ class FoxTexture {
 
 		var isDataUrl = StringTools.startsWith(name, "data:");
 		if(!Assets.exists(name) && !isDataUrl) {
-			FoxLog.warning('FoxTexture', 'Could not load compressed image: ${name} (Not found.)');
+			FoxLog.error('FoxTexture', 'Could not load compressed image: ${name} (Not found.)');
 			return null;
 		}
 
@@ -355,7 +355,7 @@ class FoxTexture {
 
 		function onBytesLoaded(bytes:haxe.io.Bytes) {
 			if(bytes == null) {
-				FoxLog.warning('FoxTexture', 'Could not create compressed image: ${name} (ImageBytes error.)');
+				FoxLog.error('FoxTexture', 'Could not create compressed image: ${name} (ImageBytes error.)');
 				FoxCache.textures().remove(name);
 				return;
 			}
@@ -365,7 +365,7 @@ class FoxTexture {
 				case 0x20534444: __fromDDSBytes(bytes, foxTex); // DDS
 				case 0x5CA1AB13: __fromASTCBytes(bytes, foxTex); // ASTC (astcenc)
 				default: {
-					FoxLog.warning('FoxTexture', 'Could not create compressed image: ${name} (Unrecognized compressed texture. Header: ${bytes.getString(0, 4)})');
+					FoxLog.error('FoxTexture', 'Could not create compressed image: ${name} (Unrecognized compressed texture. Header: ${bytes.getString(0, 4)})');
 					false;
 				}
 			}
@@ -377,7 +377,7 @@ class FoxTexture {
 		}
 
 		function onBytesError(e:Dynamic) {
-			FoxLog.warning('FoxTexture', 'Could not create compressed image: ${name} ($e)');
+			FoxLog.error('FoxTexture', 'Could not create compressed image: ${name} ($e)');
 			FoxCache.textures().remove(name);
 		}
 
@@ -408,7 +408,7 @@ class FoxTexture {
 	**/
 	@:dox(hide) @:noCompletion public static function __fromDDSBytes(bytes:Bytes, outTex:FoxTexture) {
 		if(bytes.getInt32(0) != 0x20534444) {
-			FoxLog.warning('FoxTexture', 'Invalid DDS image: ${outTex.assetsKey} (Bad magic number.)');
+			FoxLog.error('FoxTexture', 'Invalid DDS image: ${outTex.assetsKey} (Bad magic number.)');
 			return false;
 		}
 		var reader = new BytesInput(bytes);
@@ -429,7 +429,7 @@ class FoxTexture {
 		var pfFourCC  = reader.readString(4); //pos=84
 			
 		if((pfFlags & 0x4) == 0) { // check FourCC, if we don't have this it means DDS is uncompressed
-			FoxLog.warning('FoxTexture', 'Could not create compressed image: ${outTex.assetsKey} (DDS is uncompressed and not supported.)');
+			FoxLog.error('FoxTexture', 'Could not create compressed image: ${outTex.assetsKey} (DDS is uncompressed and not supported.)');
 			return false;
 		}
 
@@ -457,7 +457,7 @@ class FoxTexture {
 		}
 
 		if(err != "") {
-			FoxLog.warning('FoxTexture', 'Could not create compressed image: ${outTex.assetsKey} ($err not supported.)');
+			FoxLog.error('FoxTexture', 'Could not create compressed image: ${outTex.assetsKey} ($err not supported.)');
 			return false;
 		}
 
@@ -474,7 +474,7 @@ class FoxTexture {
 			case 'ETCA': etc2.COMPRESSED_RGBA8_ETC2_EAC; // ETC2_RGBA
 			case 'DX10': 0; // BC6+, BPTC, DXGI
 			default: {
-				FoxLog.warning('FoxTexture', 'Could not create compressed image: ${outTex.assetsKey} (unsupported DDS FourCC: $pfFourCC)');
+				FoxLog.error('FoxTexture', 'Could not create compressed image: ${outTex.assetsKey} (unsupported DDS FourCC: $pfFourCC)');
 				return false;
 			}
 		}
@@ -514,7 +514,7 @@ class FoxTexture {
 					default: 0;
 				}
 			} catch(e:Dynamic) {
-				FoxLog.warning('FoxTexture', 'Could not create compressed image: ${outTex.assetsKey} (S3TC_SRGB/RGTC/BPTC not supported in this device. Tried to load dxgi format: $dxgiFormat)');
+				FoxLog.error('FoxTexture', 'Could not create compressed image: ${outTex.assetsKey} (S3TC_SRGB/RGTC/BPTC not supported in this device. Tried to load dxgi format: $dxgiFormat)');
 				return false;
 			}
 
@@ -525,7 +525,7 @@ class FoxTexture {
 			}
 
 			if(glFormat == 0) {
-				FoxLog.warning('FoxTexture', 'Could not create compressed image: ${outTex.assetsKey} (DXGI format not supported: $dxgiFormat)');
+				FoxLog.error('FoxTexture', 'Could not create compressed image: ${outTex.assetsKey} (DXGI format not supported: $dxgiFormat)');
 				return false;
 			}
 		}
@@ -575,7 +575,7 @@ class FoxTexture {
 
 				var error = gl.getError();
 				if(error != 0) {
-					FoxLog.warning('FoxTexture', 'Warning: Error when loading compressed image: ${outTex.assetsKey}. ${level == 0 ? "Texture" : "Mipmaps"} might not be visible (code: $error)');
+					FoxLog.error('FoxTexture', 'Warning: Error when loading compressed image: ${outTex.assetsKey}. ${level == 0 ? "Texture" : "Mipmaps"} might not be visible (code: $error)');
 				}
 			}
 			
@@ -598,14 +598,14 @@ class FoxTexture {
 	**/
 	@:dox(hide) @:noCompletion public static function __fromASTCBytes(bytes:Bytes, outTex:FoxTexture) {
 		if(bytes.getInt32(0) != 0x5CA1AB13) {
-			FoxLog.warning('FoxTexture', 'Invalid DDS image: ${outTex.assetsKey} (Bad magic number.)');
+			FoxLog.error('FoxTexture', 'Invalid DDS image: ${outTex.assetsKey} (Bad magic number.)');
 			return false;
 		}
 
 		final astc = FoxRenderer.extensions.astc;
 		
 		if(astc == null) {
-			FoxLog.warning('FoxTexture', 'Could not create compressed image: ${outTex.assetsKey} (KHR_texture_compression_astc_ldr not supported.)');
+			FoxLog.error('FoxTexture', 'Could not create compressed image: ${outTex.assetsKey} (KHR_texture_compression_astc_ldr not supported.)');
 			return false;
 		}
 
@@ -637,7 +637,7 @@ class FoxTexture {
 			case 'CA': astc.COMPRESSED_RGBA_ASTC_12x10_KHR;
 			case 'CC': astc.COMPRESSED_RGBA_ASTC_12x12_KHR;
 			default: {
-				FoxLog.warning('FoxTexture', 'Could not create compressed image: ${outTex.assetsKey} (unsupported ASTC format: ${blockX}x${blockY})');
+				FoxLog.error('FoxTexture', 'Could not create compressed image: ${outTex.assetsKey} (unsupported ASTC format: ${blockX}x${blockY})');
 				return false;
 			}
 		}
@@ -667,7 +667,7 @@ class FoxTexture {
 			
 			var error = gl.getError();
 			if(error != 0) {
-				FoxLog.warning('FoxTexture', 'Error when loading compressed image: ${outTex.assetsKey}. Texture might not be visible (code: $error)');
+				FoxLog.error('FoxTexture', 'Error when loading compressed image: ${outTex.assetsKey}. Texture might not be visible (code: $error)');
 			}
 
 			context.__bindGLTexture2D(null);
