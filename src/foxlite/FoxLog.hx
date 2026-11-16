@@ -1,4 +1,4 @@
-package foxlite; // fucking hate this
+package foxlite;
 
 class FoxLog {
 	public static var lastLog:String;
